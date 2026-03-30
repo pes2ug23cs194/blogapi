@@ -11,7 +11,15 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto", bcrypt__rounds
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 
     hashed_password = pwd_context.hash(user.password)
+    
+    
     new_user = models.User(email=user.email, password=hashed_password)
+    existing_user = db.query(models.User).filter(models.User.email == user.email).first()
+    if existing_user:
+        raise HTTPException(
+            status_code= status.HTTP_400_BAD_REQUEST,
+            detail = "Email already exists"
+        )
 
     db.add(new_user)
     db.commit()
