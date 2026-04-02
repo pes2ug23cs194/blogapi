@@ -9,15 +9,15 @@ class User(Base):
     id = Column(Integer, primary_key=True, nullable=False)
     email = Column(String, nullable=False, unique=True)
     password = Column(String, nullable=False)
-    created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text("(datetime('now'))"))
+    created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
 class Post(Base):
     __tablename__ = "posts"
     
     id = Column(Integer, primary_key=True, nullable=False)
-    owner_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    owner_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False,index = True)
     
     title = Column(String,nullable=False)
-    created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text("(datetime('now'))"))
+    created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
     published = Column(Boolean,default=True)
     content = Column(String,nullable=False)
 
